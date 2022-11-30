@@ -142,19 +142,35 @@ __device__ __attribute__((const)) float __ocml_fma_rtz_f32(float, float, float);
 
 __device__ inline __attribute__((const)) float
 __llvm_amdgcn_cos_f32(float __x) {
+#if __has_builtin(__builtin_amdgcn_cosf)
   return __builtin_amdgcn_cosf(__x);
+#else
+  return __ocml_cos_f32(__x);
+#endif
 }
 __device__ inline __attribute__((const)) float
 __llvm_amdgcn_rcp_f32(float __x) {
+#if __has_builtin(__builtin_amdgcn_rcpf)
   return __builtin_amdgcn_rcpf(__x);
+#else
+  return 1/__x;
+#endif
 }
 __device__ inline __attribute__((const)) float
 __llvm_amdgcn_rsq_f32(float __x) {
+#if __has_builtin(__builtin_amdgcn_rsqf)
   return __builtin_amdgcn_rsqf(__x);
+#else
+  return 1/__ocml_sqrt_f32(__x);
+#endif
 }
 __device__ inline __attribute__((const)) float
 __llvm_amdgcn_sin_f32(float __x) {
+#if __has_builtin(__builtin_amdgcn_sinf)
   return __builtin_amdgcn_sinf(__x);
+#else
+  return __ocml_sin_f32(__x);
+#endif
 }
 // END INTRINSICS
 // END FLOAT
@@ -281,11 +297,19 @@ __device__ __attribute__((const)) double __ocml_fma_rtz_f64(double, double,
 
 __device__ inline __attribute__((const)) double
 __llvm_amdgcn_rcp_f64(double __x) {
+#if __has_builtin(__builtin_amdgcn_rcp)
   return __builtin_amdgcn_rcp(__x);
+#else
+  return 1/__x;
+#endif
 }
 __device__ inline __attribute__((const)) double
 __llvm_amdgcn_rsq_f64(double __x) {
+  #if __has_builtin(__builtin_amdgcn_rsq)
   return __builtin_amdgcn_rsq(__x);
+#else
+  return 1/__ocml_sqrt_f64(__x);
+#endif
 }
 
 __device__ __attribute__((const)) _Float16 __ocml_ceil_f16(_Float16);
